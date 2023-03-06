@@ -67,6 +67,8 @@ Fig. 24.8: HTTP Boot Overall Flow with Proxy Host
 
 **Url** The URI of a remote host. From the information in this field, the HTTP instance will be able to determine whether
 to use HTTP or HTTPS and will also be able to determine the port number to use. If no port number is specified, port 80 (HTTP) or 443 (HTTPS) is assumed. See RFC 3986 for more details on URI syntax.
+
+In cases when Method field in the Request structure is set to HttpMethodConnect, the HTTP driver expects that the supplied Request structure type is EFI_HTTP_CONNECT_REQUEST_DATA.
 ```
 //*******************************************
 // EFI_HTTP_CONNECT_REQUEST_DATA
@@ -76,6 +78,6 @@ typedef struct {
   CHAR16                  *ProxyUrl;
 } EFI_HTTP_CONNECT_REQUEST_DATA;
 ```
-**Base**  Request Data containing the HTTP Method (HttpMethodConnect) and the URI of the Endpoint Server.
+EFI_HTTP_CONNECT_REQUEST_DATA structure begins with base EFI_HTTP_REQUEST_DATA structure (Base) for backward compatibility. HTTP driver is expected to type-cast EFI_HTTP_MESSAGE Request field to EFI_HTTP_CONNECT_REQUEST_DATA in order to obtain additional fields required to establish a connection with a proxy server:
 
 **ProxyUrl**  The URI of a Proxy Host, to be used only when using HttpMethodConnect in Base->Method. From the information in this field, the HTTP instance will be able to determine the port number to use and whether to use HTTP or HTTPS and will also be able to determine the port number to use. If no port number is specified, port 80 (HTTP) or 443 (HTTPS) is assumed. While ProxyUrl determines the HTTP/HTTPS protocol between the Client and Proxy Host, Base->Url determines the protocol between the Proxy Host and Endpoint Server. See RFC 3986 for more details on URI syntax.
